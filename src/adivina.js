@@ -1,40 +1,54 @@
-import React from "react"
-import { useState } from "react";
-export default function Adivina() {
+import { useState, useEffect } from "react";
+function Adivina() {
     const [intentos, setIntento] = useState(0);
-    const [numeroRandom, setRNum] = useState(0);
+    const [numeroRandom, setNumeroRandom] = useState(getRandomNumero());
     const [texto, setTexto] = useState("Empieza")
-    const [numeroUsuario, setUnum] = useState();
+    const [numUsuario, setNumUsuario] = useState("");
+
     function getRandomNumero() {
-        let numeroRandom = Math.floor(Math.random() * 10) + 1;
-        return numeroRandom
+        return Math.floor(Math.random() * 10) + 1;
     }
-    function manejarClick() {
-        const numeroRandom = getRandomNumero()
-        if (numeroUsuario === numeroRandom) {
-            if (numeroUsuario === numeroRandom) {
-                texto.textContent = `¡Felicitaciones! Adivinaste el número ${numeroRandom} en ${intentos} intentos.`;
-                setTimeout(() => {
-                }, 5000)
-            } else if (numeroUsuario < numeroRandom) {
-                texto.textContent = "El número es mayor.";
-                setTimeout(() => {
-                    texto.textContent = "Intente de Nuevo";
-                }, 2000)
-            } else {
-                texto.textContent = "El número es menor.";
-                setTimeout(() => {
-                    texto.textContent = "Intente de Nuevo";
-                }, 2000)
-            }
-        }
-    }
+    const handleGuess = () => {
+        const ingresoDeNumero = parseInt(numUsuario)
+        setIntento(intentos + 1)
+
+        if (ingresoDeNumero === numeroRandom) {
+            setTimeout(() => {
+                resetGame();
+              }, 5000);
+            setTexto(`¡Felicitaciones! Adivinaste el número ${numeroRandom} en ${intentos} intentos.`);
+            
+          } else if (ingresoDeNumero < numeroRandom) {
+            setTexto("El número es mayor.");
+            setTimeout(() => {
+              setTexto("Intente de Nuevo");
+            }, 2000);
+          } else {
+            setTexto("El número es menor.");
+            setTimeout(() => {
+              setTexto("Intente de Nuevo");
+            }, 2000);
+          }
+        };
+    const resetGame = () => {
+        const newRandomNumero = getRandomNumero();
+        setNumeroRandom(newRandomNumero);
+        setNumUsuario('');
+        setIntento(0);
+        setTexto("Empieza");
+    };
+    useEffect(() => {
+        resetGame();
+    }, []);
+
+
     return (
         <div>
-            <input type="number" value={numeroUsuario}>
+            <input type="text" value={numUsuario} onChange={(e) => setNumUsuario(e.target.value)}>
             </input>
-            <button onClick={manejarClick}>Adivinar</button>
+            <button id="btAdivinar" onClick={handleGuess}>Adivinar</button>
             <p>{texto}</p>
         </div>
     )
 }
+export default Adivina;
