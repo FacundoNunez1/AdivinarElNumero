@@ -31,8 +31,8 @@ function Adivina() {
           }
         };
     const resetGame = () => {
-        const newRandomNumero = getRandomNumero();
-        setNumeroRandom(newRandomNumero);
+        const nuevoRandomNumero = getRandomNumero();
+        setNumeroRandom(nuevoRandomNumero);
         setNumUsuario('');
         setIntento(0);
         setTexto("Empieza");
